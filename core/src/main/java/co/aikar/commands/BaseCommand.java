@@ -263,6 +263,7 @@ public abstract class BaseCommand {
             Collections.addAll(cmdList, cmdAliases);
             cmdList.remove(cmd);
             for (String cmdAlias : cmdList) {
+                registerSubclasses(cmdAlias);
                 register(cmdAlias, this);
             }
         }
@@ -643,6 +644,9 @@ public abstract class BaseCommand {
             final List<String> cmds = new ArrayList<>();
             if (search != null) {
                 for (RegisteredCommand<?> command : search.commands) {
+                    if (command.scope != this) {
+                        continue;
+                    }
                     cmds.addAll(completeCommand(issuer, command, search.args, commandLabel, isAsync));
                 }
             }
